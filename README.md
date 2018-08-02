@@ -1,5 +1,5 @@
 # alvr-freePIE-tracking
-Tracking for (ALVR)[https://github.com/polygraphene/ALVR] using freePIE and OpenVR tracking
+Tracking for [ALVR](https://github.com/polygraphene/ALVR) using freePIE and OpenVR tracking
 
 ## Usage
 
