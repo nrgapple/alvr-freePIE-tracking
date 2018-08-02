@@ -36,11 +36,20 @@ else:
     device_name = list(v.devices.keys())[0]
     
 if interval:
+    print("sending data for device [" + device_name + "]:")
+    print("  x=   |  y=   |  z=   | r_x=  | r_y=  | r_z   |")
     while(True):
         start = time.time()
         
         data = get_values(device_name)
-        print("\r" + "sending data for device [" + device_name + "] = " + str(data),  end="")
+        txt = ""
+        for each in data:
+            if each > 0:
+                txt += " "
+            txt += "%.4f" % each
+            txt += "|"
+        
+        print("\r" + txt,  end="")
         packer = struct.Struct('f f f f f f')
         packed_data = packer.pack(*data)
         try:
