@@ -37,7 +37,7 @@ else:
     
 if interval:
     print("sending data for device [" + device_name + "]:")
-    print("  x=   |  y=   |  z=   | r_x=  | r_y=  | r_z   |")
+    print("  x=   |  y=   |  z=   | r_x=  | r_y=  | r_z=  |")
     while(True):
         start = time.time()
         
