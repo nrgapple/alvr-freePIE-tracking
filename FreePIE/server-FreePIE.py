@@ -19,8 +19,8 @@ def loop():
     alvr.head_orientation[1] = unpacked_data[4]
     alvr.head_orientation[2] = unpacked_data[5]
     diagnostics.watch(unpacked_data)
-    diagnostics.watch(alvr.head_position)
-    diagnostics.watch(alvr.head_orientation)
+    diagnostics.watch(str(alvr.head_position))
+    diagnostics.watch(str(alvr.head_orientation))
 
 # update -----
 if starting:

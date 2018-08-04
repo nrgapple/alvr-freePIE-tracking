@@ -91,6 +91,11 @@ class vr_tracked_device():
         pose = self.vr.getDeviceToAbsoluteTrackingPose(openvr.TrackingUniverseStanding, 0,openvr.k_unMaxTrackedDeviceCount)
         return convert_to_euler(pose[self.index].mDeviceToAbsoluteTracking)
     
+    #added by me
+    def get_pose_euler_uncalibrated(self):
+        pose = self.vr.getDeviceToAbsoluteTrackingPose(openvr.TrackingUniverseRawAndUncalibrated, 0,openvr.k_unMaxTrackedDeviceCount)
+        return convert_to_euler(pose[self.index].mDeviceToAbsoluteTracking)
+
     def get_pose_quaternion(self):
         pose = self.vr.getDeviceToAbsoluteTrackingPose(openvr.TrackingUniverseStanding, 0,openvr.k_unMaxTrackedDeviceCount)
         return convert_to_quaternion(pose[self.index].mDeviceToAbsoluteTracking)

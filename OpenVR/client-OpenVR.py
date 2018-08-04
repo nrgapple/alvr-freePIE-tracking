@@ -10,12 +10,18 @@ UDP_PORT_NO = 6789
 INTERVAL_ARG = '-i'
 TRACKED_DEVICE = '-d'
 
-def get_values(name):
-    data = v.devices[name].get_pose_euler()
-    for i in range(3, 6):
-        data[i] = math.radians(data[i])
-    return data
+def get_values(tracker_name):
+    tracker_data = v.devices[tracker_name].get_pose_euler_uncalibrated()
+    reference_data2 = v.devices["tracking_reference_2"].get_pose_euler_uncalibrated()
 
+    tracker_data[0] = tracker_data[0]
+    tracker_data[2] = tracker_data[2]
+    send_pos = list(map(float.__sub__, tracker_data, reference_data2))
+
+    for i in range(3, 6):
+        send_pos[i] = math.radians(send_pos[i])
+
+    return send_pos
 
 # Main ------
 v = triad_openvr.triad_openvr()
@@ -23,7 +29,7 @@ v.print_discovered_objects()
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server_address = (UDP_IP_ADDRESS, UDP_PORT_NO)
-
+prev_pos = [float(0),float(0),float(0),float(0),float(0),float(0)]
 
 if INTERVAL_ARG in sys.argv:
     interval = 1/float(sys.argv[sys.argv.index(INTERVAL_ARG) + 1])
@@ -42,13 +48,13 @@ if interval:
         start = time.time()
         
         data = get_values(device_name)
+
         txt = ""
         for each in data:
             if each > 0:
                 txt += " "
             txt += "%.4f" % each
             txt += "|"
-        
         print("\r" + txt,  end="")
         packer = struct.Struct('f f f f f f')
         packed_data = packer.pack(*data)
@@ -56,6 +62,7 @@ if interval:
             sent = sock.sendto(packed_data, server_address)
         except:
              print("error")
+        prev_pos = data
         sleep_time = interval-(time.time()-start)
         if sleep_time>0:
             time.sleep(sleep_time)
